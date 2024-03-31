@@ -43,6 +43,7 @@ public:
 
 public:
 	void Tick();
+	void Trail(int frame, State currentState);
 
 
 	void Animation(int frame, State currentstate);

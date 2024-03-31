@@ -55,6 +55,11 @@ void Character::Animation(int frame, State currentstate) {
 
 }
 
+void Character::Trail(int frame, State currentState) {
+	DrawTextureRec(player_run_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
+
+}
+
 void Character::Tick() {
 	float deltatime = GetFrameTime();
 	State currentstate = idle;
@@ -84,8 +89,7 @@ void Character::Tick() {
 		currentstate = jump;
 	}
 
-
+	Trail(frame, currentstate);
 	Animation(frame, currentstate);
-
 
 }

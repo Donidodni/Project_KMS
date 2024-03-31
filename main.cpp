@@ -8,10 +8,10 @@
 
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_STATIC
-#define SNOWS 120
+#define SNOWS 200
 
 void debug() {
-	
+
 
 }
 
@@ -26,11 +26,6 @@ int score = {};
 
 float randf() {
 	return (rand() % 1000) / 1000.0f;
-}
-
-void snow_pixel() {
-
-
 }
 
 int main() {
@@ -51,11 +46,12 @@ int main() {
 
 	Camera2D camera = { 0 };
 	camera.target = { 0.0f, 0.0f };
-	camera.offset = { width/300.f , height / 230 };
+	camera.offset = { width / 300.f , height / 230 };
 	camera.rotation = 0.0f;
 	camera.zoom = 1.0f;
 
-	Rectangle Item = {600,515,20,30};
+	Rectangle Item = { 600,515,20,30 };
+	Rectangle Arrow = { 800,520 ,60, 15 };
 
 	Star stars[SNOWS] = { 0 };
 	for (int i = 0; i < SNOWS; i++) {
@@ -71,43 +67,61 @@ int main() {
 		float deltatime = GetFrameTime();
 		CurrentTime += deltatime;
 
+
 		BeginMode2D(camera);
-		DrawRectangleRec(Player_boxs, RED);
 		player.Tick();
 		BeginDrawing();
 
-		if (CurrentTime >= 0.3f) {
+		if (CurrentTime >= 0.1f) {
 			CurrentTime = 0.f;
+		}
+
+		if (Arrow.x < -30 || CheckCollisionRecs({ Player_boxs }, { Arrow })) {
+			Arrow.x = 1200;
+
+		}
+		else {
+			Arrow.x -= 6.f;
 		}
 
 		for (int i = 0; i < SNOWS; i++) {
 
-			stars[i].y += 2;
-
-			if (stars[i].y >= 1200) {
-				stars[i].x = GetRandomValue(0, 1200);
+			stars[i].y += GetRandomValue(0, 2);
+			stars[i].x -= GetRandomValue(0, 1);
+			if (stars[i].y >= 1200 || stars[i].x >= 1200) {
+				stars[i].x = GetRandomValue(400, 1200);
 				stars[i].y = 0;
 			}
 		}
+
+
 		for (int i = 0; i < SNOWS; i++) {
 			float x = stars[i].x;
 			float y = stars[i].y;
 			for (int j = 0; j < 2; j++) {
 				DrawPixel(x, y + j, WHITE);
-				DrawPixel(x+1, y + j, WHITE);
+				DrawPixel(x + 1, y + j, WHITE);
 				DrawPixel(x, y + j, WHITE);
-				DrawPixel(x-1, y + j, WHITE);
+				DrawPixel(x - 1, y + j, WHITE);
 			}
-
 		}
-		DrawRectangleRec(Item,RED);
 
-		if (CheckCollisionRecs({Player_boxs}, {Item})) {
+
+
+
+		DrawRectangleRec(Item, RED);
+		DrawRectangleRec(Arrow, GREEN);
+
+		if (CheckCollisionRecs({ Player_boxs }, { Item })) {
 			PlaySound(coin);
 			std::cout << "Touched" << std::endl;
 			std::cout << IsSoundPlaying(coin) << std::endl;
 			Item.x = GetRandomValue(20, 600);
 			score += 1;
+			WaitTime(0.1);
+		}
+		if (CheckCollisionRecs({ Player_boxs }, { Arrow })) {
+			std::cout << "Touched : Arrow" << std::endl;
 		}
 
 		std::string position_x_value = std::to_string(player.position_x);
@@ -123,6 +137,8 @@ int main() {
 		DrawText(Scores, 30, 90, 20, WHITE);
 		EndDrawing();
 	}
+
+
 
 	UnloadSound(coin);
 	CloseAudioDevice();
