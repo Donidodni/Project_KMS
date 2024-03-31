@@ -8,6 +8,7 @@
 
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_STATIC
+#define SNOWS 120
 
 void debug() {
 	
@@ -21,9 +22,15 @@ typedef struct {
 }Star;
 
 float CurrentTime = {};
+int score = {};
 
 float randf() {
 	return (rand() % 1000) / 1000.0f;
+}
+
+void snow_pixel() {
+
+
 }
 
 int main() {
@@ -50,8 +57,8 @@ int main() {
 
 	Rectangle Item = {600,515,20,30};
 
-	Star stars[50] = { 0 };
-	for (int i = 0; i < 50; i++) {
+	Star stars[SNOWS] = { 0 };
+	for (int i = 0; i < SNOWS; i++) {
 		stars[i].x = GetRandomValue(0, 800);
 		stars[i].y = GetRandomValue(0, 1200);
 		stars[i].z = randf();
@@ -69,21 +76,27 @@ int main() {
 		player.Tick();
 		BeginDrawing();
 
-		for (int i = 0; i < 50; i++) {
+		if (CurrentTime >= 0.3f) {
+			CurrentTime = 0.f;
+		}
 
-			stars[i].y += 12;
+		for (int i = 0; i < SNOWS; i++) {
+
+			stars[i].y += 2;
 
 			if (stars[i].y >= 1200) {
 				stars[i].x = GetRandomValue(0, 1200);
 				stars[i].y = 0;
 			}
 		}
-
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < SNOWS; i++) {
 			float x = stars[i].x;
 			float y = stars[i].y;
 			for (int j = 0; j < 2; j++) {
 				DrawPixel(x, y + j, WHITE);
+				DrawPixel(x+1, y + j, WHITE);
+				DrawPixel(x, y + j, WHITE);
+				DrawPixel(x-1, y + j, WHITE);
 			}
 
 		}
@@ -93,17 +106,21 @@ int main() {
 			PlaySound(coin);
 			std::cout << "Touched" << std::endl;
 			std::cout << IsSoundPlaying(coin) << std::endl;
-			Item.y = -100;
+			Item.x = GetRandomValue(20, 600);
+			score += 1;
 		}
 
 		std::string position_x_value = std::to_string(player.position_x);
 		const char* X_value = position_x_value.c_str();
 		DrawText(X_value, 30, 50, 20, WHITE);
 
-		std::string Time_str = std::to_string(CurrentTime);
+		std::string Time_str = "CurrentTime" + std::to_string(CurrentTime);
 		const char* RunningTime = Time_str.c_str();
 		DrawText(RunningTime, 30, 70, 20, WHITE);
 
+		std::string Score_value = "Score : " + std::to_string(score);
+		const char* Scores = Score_value.c_str();
+		DrawText(Scores, 30, 90, 20, WHITE);
 		EndDrawing();
 	}
 
