@@ -7,6 +7,11 @@ class Character
 {
 protected:
 
+	enum State
+	{
+		idle, left, run, jump
+	};
+
 	int movement_x = 0;
 	int movement_y = 0;
 	float gravity = 0.5f;
@@ -37,9 +42,8 @@ public:
 	int frame = 0;
 
 public:
-	void Tick( );
-	void Animation_idle( int frame);
-	void Animation_run(int frame);
-	void Animation_run_left(int frame);
-	void Animation_jump(int frame);
+	void Tick();
+
+
+	void Animation(int frame, State currentstate);
 };

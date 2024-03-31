@@ -1,6 +1,4 @@
 #include "character.h"
-
-
 #define SPRITE 64
 
 Character::Character() {
@@ -26,34 +24,40 @@ Character::~Character() {
 }
 
 
-void Character::Animation_idle(int frame) {
-	sprite.x = SPRITE * (frame % 4);
-	sprite.y = 0;
-	DrawTextureRec(player_idle_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
-}
-void Character::Animation_run(int frame) {
-	sprite.x = SPRITE * (frame % 5);
-	sprite.y = 0;
-	DrawTextureRec(player_run_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
-}
-void Character::Animation_run_left(int frame) {
-	sprite.x = SPRITE * (frame % 5);
-	sprite.y = 0;
-	DrawTextureRec(player_run_left_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
-}
-void Character::Animation_jump(int frame) {
-	position.y -= jump_velocity;
-	jump_velocity -= gravity;
-	if (position.y >= 510.f) {
-		isGrounded = true;
-		isJumping = false;
+
+void Character::Animation(int frame, State currentstate) {
+	if (currentstate == idle) {
+		sprite.x = SPRITE * (frame % 4);
+		sprite.y = 0;
+		DrawTextureRec(player_idle_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
+	}
+	else if (currentstate == run) {
+		sprite.x = SPRITE * (frame % 5);
+		sprite.y = 0;
+		DrawTextureRec(player_run_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
+	}
+	else if (currentstate == left) {
+		sprite.x = SPRITE * (frame % 5);
+		sprite.y = 0;
+		DrawTextureRec(player_run_left_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
+	}
+	else if (currentstate == jump) {
+		position.y -= jump_velocity;
+		jump_velocity -= gravity;
+
+		if (position.y >= 510.f) {
+			isGrounded = true;
+			isJumping = false;
+		}
+
+		DrawTextureRec(player_idle_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
 	}
 
-	DrawTextureRec(player_idle_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
 }
 
 void Character::Tick() {
 	float deltatime = GetFrameTime();
+	State currentstate = idle;
 	Runtime += deltatime;
 	position_x = position.x + movement_x;
 	position_y = position.y + movement_y;
@@ -65,22 +69,23 @@ void Character::Tick() {
 
 
 	if (IsKeyDown(KEY_LEFT)) {
+		currentstate = left;
 		movement_x -= 3.0f;
-		Animation_run_left(frame);
 	}
 	else if (IsKeyDown(KEY_RIGHT)) {
+		currentstate = run;
 		movement_x += 3.0f;
-		Animation_run(frame);
 	}
-	else {
-		Animation_idle(frame);
-	}
-	if (IsKeyPressed(KEY_SPACE)) {
+	else if (IsKeyPressed(KEY_SPACE)) {
 		isJumping = true;
 		jump_velocity = 10.f;
 	}
 	if (isJumping) {
-		Animation_jump(frame);
+		currentstate = jump;
 	}
+
+
+	Animation(frame, currentstate);
+
 
 }
