@@ -1,37 +1,45 @@
 #pragma once
 #include "raylib.h"
+#include "iostream"
 
 
 class Character
 {
 protected:
-	enum state
-	{
-		idle, right, left
-	};
+
 	int movement_x = 0;
 	int movement_y = 0;
+	float gravity = 1.5f;
+	float jump_velocity;
+	bool isGrounded = true;
+	bool isJumping = false;
 
 public:
 
 	Character();
 	~Character();
+	float position_x = 0.f;
+	float position_y = 0.f;
 
-	Image player_picture;
-	Image player_picture_left;
-	Texture2D player_pic_idle;
-	Texture2D player_pic_left;
-	Texture2D player_pic_right;
+	Image player_idle;
+	Image player_run;
+	Image player_run_left;
 
-	Rectangle sprite_normal;
-	Rectangle sprite_flip;
-	state characterState;
+	Texture2D player_idle_t;
+	Texture2D player_run_t;
+	Texture2D player_run_left_t;
+
+	Rectangle sprite;
+	Rectangle chracter_box;
 
 	Vector2 position;
-	float time= {};
+	float Runtime = {};
 	int frame = 0;
 
-	void Draw(int x, int y);
+public:
 	void Tick( );
-	void Animation(state, int frame);
+	void Animation_idle( int frame);
+	void Animation_run(int frame);
+	void Animation_run_left(int frame);
+	void Animation_jump(int frame);
 };

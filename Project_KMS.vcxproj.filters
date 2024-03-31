@@ -24,6 +24,9 @@
     <ClCompile Include="background.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="rain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character.h">
@@ -31,6 +34,12 @@
     </ClInclude>
     <ClInclude Include="background.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Downloads\raygui.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="rain.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
