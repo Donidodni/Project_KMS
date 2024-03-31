@@ -100,7 +100,7 @@ int main() {
 		std::string position_y_value = std::to_string(Player_boxs.y);
 		const char* Y_value = position_y_value.c_str();
 
-		DrawText(X_value, 30, 50, 10, WHITE);
+		DrawText(X_value, 30, 50, 20, WHITE);
 		EndDrawing();
 	}
 

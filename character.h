@@ -9,7 +9,7 @@ protected:
 
 	int movement_x = 0;
 	int movement_y = 0;
-	float gravity = 1.5f;
+	float gravity = 0.5f;
 	float jump_velocity;
 	bool isGrounded = true;
 	bool isJumping = false;

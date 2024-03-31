@@ -42,17 +42,13 @@ void Character::Animation_run_left(int frame) {
 	DrawTextureRec(player_run_left_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
 }
 void Character::Animation_jump(int frame) {
-
-	if (isJumping) {
-		position.y -= jump_velocity; 
-		jump_velocity -= gravity; 
-
-		if (position.y >= 500.f) { 
-			isGrounded = true; 
-			isJumping = false; 
-			jump_velocity = 30.0f; 
-		}
+	position.y -= jump_velocity;
+	jump_velocity -= gravity;
+	if (position.y >= 510.f) {
+		isGrounded = true;
+		isJumping = false;
 	}
+
 	DrawTextureRec(player_idle_t, sprite, { position.x + movement_x,position.y + movement_y }, WHITE);
 }
 
@@ -62,11 +58,11 @@ void Character::Tick() {
 	position_x = position.x + movement_x;
 	position_y = position.y + movement_y;
 
-
 	if (Runtime >= 0.1f) {
 		Runtime = 0;
 		frame++;
 	}
+
 
 	if (IsKeyDown(KEY_LEFT)) {
 		movement_x -= 3.0f;
@@ -76,14 +72,15 @@ void Character::Tick() {
 		movement_x += 3.0f;
 		Animation_run(frame);
 	}
-	else if (IsKeyPressed(KEY_SPACE)) {
-		isJumping = true;
-		isGrounded = false;
-		jump_velocity = 30.f;
-		Animation_jump(frame);
-	}
 	else {
 		Animation_idle(frame);
+	}
+	if (IsKeyPressed(KEY_SPACE)) {
+		isJumping = true;
+		jump_velocity = 10.f;
+	}
+	if (isJumping) {
+		Animation_jump(frame);
 	}
 
 }
