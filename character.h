@@ -12,11 +12,11 @@ protected:
 		idle, left, run, jump
 	};
 
-	int movement_x = 0;
-	int movement_y = 0;
-	float gravity = 0.5f;
-	float jump_velocity;
-	bool isGrounded = true;
+	int movement_x = 0; // Indicating player movement about x
+	int movement_y = 0; // Indicating player movement about y
+	float gravity = 0.5f; // Need a value about gravity so gradually falling down 
+	float jump_velocity; // 
+	bool isGrounded = true; // 
 	bool isJumping = false;
 
 public:
@@ -26,7 +26,7 @@ public:
 	float position_x = 0.f;
 	float position_y = 0.f;
 
-	Image player_idle;
+	Image player_idle; 
 	Image player_run;
 	Image player_run_left;
 

@@ -76,7 +76,7 @@ void Character::Tick() {
 		currentstate = run;
 		movement_x += 3.0f;
 	}
-	else if (IsKeyPressed(KEY_SPACE)) {
+	if (IsKeyPressed(KEY_SPACE)) {
 		isJumping = true;
 		jump_velocity = 10.f;
 	}

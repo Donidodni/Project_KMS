@@ -13,8 +13,6 @@ void debug() {
 	
 
 }
-int currentProcess = NULL;
-
 
 typedef struct {
 	float x,    //The stars coordinates
@@ -22,6 +20,7 @@ typedef struct {
 		z;    //The stars depth or distance from camera
 }Star;
 
+float CurrentTime = {};
 
 float randf() {
 	return (rand() % 1000) / 1000.0f;
@@ -62,6 +61,8 @@ int main() {
 	while (!WindowShouldClose()) {
 		ClearBackground(BLACK);
 		Rectangle Player_boxs = { player.position_x,player.position.y ,64,64 };
+		float deltatime = GetFrameTime();
+		CurrentTime += deltatime;
 
 		BeginMode2D(camera);
 		DrawRectangleRec(Player_boxs, RED);
@@ -69,9 +70,10 @@ int main() {
 		BeginDrawing();
 
 		for (int i = 0; i < 50; i++) {
+
 			stars[i].y += 12;
 
-			if (stars[i].y >= 1200) {   
+			if (stars[i].y >= 1200) {
 				stars[i].x = GetRandomValue(0, 1200);
 				stars[i].y = 0;
 			}
@@ -80,8 +82,8 @@ int main() {
 		for (int i = 0; i < 50; i++) {
 			float x = stars[i].x;
 			float y = stars[i].y;
-			for (int j = 0; j < 6; j++) {
-				DrawPixel(x, y + j, BLUE);
+			for (int j = 0; j < 2; j++) {
+				DrawPixel(x, y + j, WHITE);
 			}
 
 		}
@@ -91,16 +93,17 @@ int main() {
 			PlaySound(coin);
 			std::cout << "Touched" << std::endl;
 			std::cout << IsSoundPlaying(coin) << std::endl;
-
 			Item.y = -100;
 		}
 
 		std::string position_x_value = std::to_string(player.position_x);
 		const char* X_value = position_x_value.c_str();
-		std::string position_y_value = std::to_string(Player_boxs.y);
-		const char* Y_value = position_y_value.c_str();
-
 		DrawText(X_value, 30, 50, 20, WHITE);
+
+		std::string Time_str = std::to_string(CurrentTime);
+		const char* RunningTime = Time_str.c_str();
+		DrawText(RunningTime, 30, 70, 20, WHITE);
+
 		EndDrawing();
 	}
 
